@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Daily News Ticker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='daily_news_ticker.css') }}">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="NewsScope Logo" class="logo-img">
+            </a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
+            <li><a href="{{ url_for('daily_news') }}"
+                    class="{% if request.path == '/daily-news' %}active{% endif %}">Daily News</a></li>
+            <li><a href="{{ url_for('about') }}" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            </li>
+            <li><a href="{{ url_for('contact') }}"
+                    class="{% if request.path == '/contact' %}active{% endif %}">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- News Box on the Left -->
+    <h2 class="news-box-title">📰 Catch what’s going on !</h2>
+
+    <div class="news-box-container">
+        <div class="news-scroll-box">
+            <div class="news-scroll-content">
+                {% for article in articles %}
+                <div class="news-entry">
+                    <img src="{{ url_for('static', filename='images/' + article.source + '.png') }}"
+                        alt="{{ article.source }}" class="source-logo">
+
+                    <a href="{{ article.url }}" target="_blank" class="news-title">{{ article.title }}</a>
+
+                    <button class="analyze-btn" onclick="analyzeArticle(this)" data-content="{{ article.content }}">
+                        Analyze
+                    </button>
+
+                    {% if article.publish_time %}
+                    <p><strong>Published:</strong> {{ article.published }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="popupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3>Prediction Result</h3>
+            <div id="predictionText">Analyzing...</div>
+        </div>
+    </div>
+
+    <script>
+        function analyzeArticle(button) {
+            let content = button.getAttribute("data-content");
+            let cleanedArticle = cleanText(content);
+
+
+
+            document.getElementById("predictionText").innerHTML =
+                `<span class="loading-dots">Analyzing<span>.</span><span>.</span><span>.</span></span>`;
+            document.getElementById("popupModal").style.display = "block";
+
+            fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ article: cleanedArticle, model_type: "bert" })
+
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Server error: " + response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || data.prediction === undefined || data.label === undefined) {
+                        throw new Error("Invalid data from server");
+                    }
+
+                    let output = `<strong>Prediction:</strong> ${data.label}<br><strong>Score:</strong> ${data.prediction.toFixed(2)}<br><br>`;
+
+                    if (data["Decision Explanation"]) {
+                        const explanationHTML = data["Decision Explanation"]
+                            .split("<br>")
+                            .filter(line => line.trim() !== "")
+                            .map(line => `<div class="explanation-line">${line.trim()}</div>`)
+                            .join("");
+                        output += explanationHTML;
+                    } else {
+                        output += `<strong>Explanation:</strong> Not available.`;
+                    }
+
+                    document.getElementById("predictionText").innerHTML = output;
+                })
+                .catch(err => {
+                    document.getElementById("predictionText").innerHTML =
+                        `<span style="color:red;">Error: ${err.message}</span>`;
+                });
+        }
+
+        function closeModal() {
+            document.getElementById("popupModal").style.display = "none";
+        }
+
+        function cleanText(text) {
+            return text
+                .normalize("NFKD")
+                .replace(/[’‘]/g, "'")
+                .replace(/[“”]/g, '"')
+                .replace(/\[.*?\]/g, " ")
+                .replace(/https?:\/\/\S+|www\.\S+/g, "")
+                .replace(/<.*?>+/g, "")
+                .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()@\[\]]/g, " ")
+                .replace(/\n/g, " ")
+                .replace(/\w*\d\w*/g, "")
+                .replace(/\s+/g, " ")
+                .toLowerCase()
+                .trim();
+        }
+
+
+    </script>
+</body>
+
+</html>
