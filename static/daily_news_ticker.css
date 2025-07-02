@@ -1,0 +1,284 @@
+.news-box-container {
+  position: absolute;
+  top: 180px;
+  left: 120px;
+  width: 750px;
+  max-height: 600px;
+  padding: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.063);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(10px);
+  margin-top: 50px;
+  z-index: 5;
+}
+
+
+.news-box-title {
+  position: absolute;
+  top: 150px;
+  left: 72px;
+  color: white;
+  font-size: 26px;
+  font-weight: bold;
+  border-bottom: 1px solid #ffffff36;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  margin-left: 50px;
+  z-index: 10;
+}
+
+
+.news-scroll-box {
+  height: 420px;
+  overflow: hidden;
+  position: relative;
+}
+
+.news-scroll-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: scroll-up 60s linear infinite;
+}
+
+@keyframes scroll-up {
+  0% {
+    transform: translateY(0%);
+  }
+
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+
+
+
+
+.news-title {
+  color: #66ccff;
+  text-decoration: none;
+  font-weight: bold;
+  flex-grow: 1;
+}
+
+.source-logo {
+  width: 28px;
+  height: auto;
+  border-radius: 0%;
+}
+
+.label {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: 5px;
+  color: white;
+}
+
+.label-real {
+  background-color: #28a745;
+}
+
+.label-fake {
+  background-color: #dc3545;
+}
+
+@keyframes vertical-scroll {
+  0% {
+    transform: translateY(0%);
+  }
+
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+
+.ticker-item a {
+  color: #66ccff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.source-logo {
+  width: 28px;
+  height: auto;
+  border-radius: 0%;
+}
+
+.label {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: 8px;
+  color: white;
+}
+
+.label-real {
+  background-color: #28a745;
+}
+
+.label-fake {
+  background-color: #dc3545;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-250%);
+  }
+}
+
+.news-entry {
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+
+.news-entry:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+}
+
+
+
+
+.news-scroll-box:hover .news-scroll-content {
+  animation-play-state: paused;
+}
+
+.analyze-btn {
+  background-color: transparent !important;
+  /* شفاف تماماً */
+  border: 2px solid #66ccff !important;
+  /* إطار أزرق فاتح */
+  color: #ffffff !important;
+  /* النص أبيض */
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: none !important;
+}
+
+.analyze-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding-top: 0;
+}
+
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: #0f172a;
+  color: #f1f5f9;
+  padding: 30px 40px;
+  border-radius: 12px;
+  width: 85%;
+  max-width: 650px;
+  box-shadow: 0 0 30px rgba(0, 128, 255, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  border: 1px solid #1e3a8a;
+  animation: popIn 0.3s ease-out forwards;
+  max-height: 70%;
+  overflow-y: auto;
+}
+
+
+.modal-content h3 {
+  font-size: 20px;
+  color: #ffffff;
+  margin-top: 0;
+}
+
+.modal-content p {
+  font-size: 15px;
+  color: #e0f2ff;
+  /* لون أوضح قليلاً */
+  white-space: pre-wrap;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+.modal-content em {
+  color: #66ccff !important;
+  /* تأكيد أن Analyzing... يظهر بلون واضح */
+  font-style: normal;
+  font-weight: 500;
+}
+
+.close-btn {
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  color: #93c5fd;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #ffffff;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%) scale(0.95);
+    /* خفّة من فوق */
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
